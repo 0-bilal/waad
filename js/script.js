@@ -83,52 +83,43 @@ function saveFavorite() {
         return;
     }
 
-    let favorites = JSON.parse(localStorage.getItem('favoritePoetry') || '[]');
-    
-    if (!favorites.includes(currentPoetryText)) {
-        favorites.push(currentPoetryText);
-        localStorage.setItem('favoritePoetry', JSON.stringify(favorites));
-        showNotification('تم حفظ البيت في المفضلة! 💖');
-        loadFavorites();
-        
-        // إرسال إشعار حفظ البيت عبر تيليجرام
-        sendFavoriteNotification(currentPoetryText);
-    } else {
-        showNotification('هذا البيت محفوظ مسبقاً! 😊');
-    }
+    // إرسال إشعار حفظ البيت عبر تيليجرام فقط
+    sendFavoriteNotification(currentPoetryText);
+    showNotification('تم احفظ البيت كتفضيل   💖');
 }
+
 
 // تحميل الأبيات المفضلة
-function loadFavorites() {
-    const favorites = JSON.parse(localStorage.getItem('favoritePoetry') || '[]');
-    const favoritesList = document.getElementById('favoritesList');
+// function loadFavorites() {
+//    const favorites = JSON.parse(localStorage.getItem('favoritePoetry') || '[]');
+//    const favoritesList = document.getElementById('favoritesList');
 
-    if (favorites.length === 0) {
-        favoritesList.innerHTML = '<p style="text-align: center; color: #4B2C2C; opacity: 0.7;">لا توجد أبيات محفوظة بعد</p>';
-        return;
-    }
+//    if (favorites.length === 0) {
+//        favoritesList.innerHTML = '<p style="text-align: center; color: #4B2C2C; opacity: 0.7;">لا توجد أبيات محفوظة بعد</p>';
+//        return;
+//    }
 
-    favoritesList.innerHTML = favorites.map((poetry, index) => `
-        <div class="favorite-item">
-            <button class="remove-favorite" onclick="removeFavorite(${index})" title="حذف من المفضلة">✕</button>
-            ${poetry}
-        </div>
-    `).join('');
-}
+//    favoritesList.innerHTML = favorites.map((poetry, index) => `
+//        <div class="favorite-item">
+//            <button class="remove-favorite" onclick="removeFavorite(${index})" title="حذف من المفضلة">✕</button>
+//            ${poetry}
+//        </div>
+//    `).join('');
+// }
 
 // حذف من المفضلة
-function removeFavorite(index) {
-    let favorites = JSON.parse(localStorage.getItem('favoritePoetry') || '[]');
-    const removedPoetry = favorites[index];
-    
-    favorites.splice(index, 1);
-    localStorage.setItem('favoritePoetry', JSON.stringify(favorites));
-    loadFavorites();
-    showNotification('تم حذف البيت من المفضلة');
+// function removeFavorite(index) {
+//    let favorites = JSON.parse(localStorage.getItem('favoritePoetry') || '[]');
+//    const removedPoetry = favorites[index];
+//    
+//    favorites.splice(index, 1);
+//    localStorage.setItem('favoritePoetry', JSON.stringify(favorites));
+//    loadFavorites();
+//    showNotification('تم حذف البيت من المفضلة');
     
     // إرسال إشعار حذف البيت عبر تيليجرام
-    sendRemoveFavoriteNotification(removedPoetry);
-}
+//    sendRemoveFavoriteNotification(removedPoetry);
+//}
 
 // مشاركة البيت
 function sharePoetry() {
@@ -197,7 +188,7 @@ async function sendMessage() {
     }
 
     if (TELEGRAM_CONFIG.botToken === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CONFIG.chatId === 'YOUR_CHAT_ID_HERE') {
-        showNotification('يرجى تكوين إعدادات التيليجرام أولاً! ⚙️');
+        showNotification('يرجى تكوين إعدادات أولاً! ⚙️');
         console.warn('تحتاج لتعديل TELEGRAM_CONFIG في ملف script.js');
         return;
     }
@@ -229,7 +220,7 @@ async function sendMessage() {
         }
     } catch (error) {
         console.error('Error sending message:', error);
-        showNotification('حدث خطأ في الإرسال! تأكد من إعدادات التيليجرام 😢');
+        showNotification('حدث خطأ في الإرسال! تأكد  😢');
     } finally {
         sendBtn.textContent = originalText;
         sendBtn.disabled = false;
@@ -387,7 +378,7 @@ window.addEventListener('load', function() {
     document.querySelector('.poetry-container').classList.add('heartbeat');
     
     // تحميل الأبيات المفضلة
-    loadFavorites();
+    // loadFavorites();
     
     // حفظ إحصائيات الزيارة
     saveVisitStats();
@@ -461,21 +452,21 @@ window.addEventListener('beforeunload', function() {
 });
 
 // دالة لتصدير الأبيات المفضلة
-function exportFavorites() {
-    const favorites = JSON.parse(localStorage.getItem('favoritePoetry') || '[]');
+//function exportFavorites() {
+//    const favorites = JSON.parse(localStorage.getItem('favoritePoetry') || '[]');
     
-    if (favorites.length === 0) {
-        showNotification('لا توجد أبيات مفضلة للتصدير! 📝');
-        return;
-    }
+//    if (favorites.length === 0) {
+//        showNotification('لا توجد أبيات مفضلة للتصدير! 📝');
+//        return;
+//    }
 
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(favorites, null, 2));
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "ابيات_وعد_المفضلة.json");
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+//    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(favorites, null, 2));
+//    const downloadAnchorNode = document.createElement('a');
+//    downloadAnchorNode.setAttribute("href", dataStr);
+//    downloadAnchorNode.setAttribute("download", "ابيات_وعد_المفضلة.json");
+//    document.body.appendChild(downloadAnchorNode);
+//    downloadAnchorNode.click();
+//    downloadAnchorNode.remove();
     
-    showNotification('تم تصدير الأبيات المفضلة! 📥');
-}
+//    showNotification('تم تصدير الأبيات المفضلة! 📥');
+//}
